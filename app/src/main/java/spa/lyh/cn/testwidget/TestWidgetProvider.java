@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class TestWidgetProvider extends AppWidgetProvider {
@@ -24,7 +26,7 @@ public class TestWidgetProvider extends AppWidgetProvider {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_test);
         Intent intent = new Intent(context,getClass());
         intent.setAction(CLICK_ACTION);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, R.id.doge_imageView, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, R.id.doge_imageView, intent, PendingIntent.FLAG_IMMUTABLE);
         remoteViews.setOnClickPendingIntent(R.id.doge_imageView, pendingIntent);
 
         for (int appWidgetId : appWidgetIds) {
@@ -42,6 +44,8 @@ public class TestWidgetProvider extends AppWidgetProvider {
         Log.e("qwer",intent.getAction());
         if (CLICK_ACTION.equals(intent.getAction())) {
             Toast.makeText(context, "Hello Doge~", Toast.LENGTH_SHORT).show();
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_test);
+            remoteViews.setTextViewText(R.id.tv,System.currentTimeMillis()+"");
         }
     }
 

@@ -2,10 +2,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
-    <ImageView
-        android:id="@+id/doge_imageView"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/doge" />
+    <LinearLayout
+        android:layout_width="180dp"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:background="@drawable/shape_corner_4dp">
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:text="初始化"
+            android:gravity="center_vertical"
+            android:paddingLeft="6dp"/>
+        <ImageView
+            android:id="@+id/doge_imageView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/doge"/>
+    </LinearLayout>
 </RelativeLayout>
