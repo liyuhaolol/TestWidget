@@ -3,6 +3,7 @@ package spa.lyh.cn.testwidget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +23,7 @@ public class TestWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
         Log.e("qwer","onUpdate");
-
+        //获得小组件的view
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_test);
         Intent intent = new Intent(context,getClass());
         intent.setAction(CLICK_ACTION);
@@ -46,6 +47,12 @@ public class TestWidgetProvider extends AppWidgetProvider {
             Toast.makeText(context, "Hello Doge~", Toast.LENGTH_SHORT).show();
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_test);
             remoteViews.setTextViewText(R.id.tv,System.currentTimeMillis()+"");
+
+            AppWidgetManager manager = AppWidgetManager
+                    .getInstance(context);
+            ComponentName cName = new ComponentName(context,
+                    TestWidgetProvider.class);
+            manager.updateAppWidget(cName, remoteViews);
         }
     }
 
@@ -56,7 +63,6 @@ public class TestWidgetProvider extends AppWidgetProvider {
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         super.onDeleted(context, appWidgetIds);
-        Log.e("qwer","onDeleted");
     }
 
 
@@ -66,7 +72,6 @@ public class TestWidgetProvider extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         super.onDisabled(context);
-        Log.e("qwer","onDisabled");
     }
 
 
@@ -76,7 +81,6 @@ public class TestWidgetProvider extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
-        Log.e("qwer","onEnabled");
     }
 
 
@@ -86,7 +90,6 @@ public class TestWidgetProvider extends AppWidgetProvider {
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
-        Log.e("qwer","onAppWidgetOptionsChanged");
     }
 
 
@@ -96,7 +99,6 @@ public class TestWidgetProvider extends AppWidgetProvider {
     @Override
     public void onRestored(Context context, int[] oldWidgetIds, int[] newWidgetIds) {
         super.onRestored(context, oldWidgetIds, newWidgetIds);
-        Log.e("qwer","onRestored");
     }
 
 
