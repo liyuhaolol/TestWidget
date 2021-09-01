@@ -13,6 +13,16 @@ import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.AppWidgetTarget;
+import com.bumptech.glide.request.target.NotificationTarget;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import spa.lyh.cn.lib_utils.PixelUtils;
+import spa.lyh.cn.lib_utils.TimeUtils;
+
 public class TestWidgetProvider extends AppWidgetProvider {
     public static final String CLICK_ACTION = BuildConfig.APPLICATION_ID+".action.CLICKATTENDANCE"; // 点击事件的广播ACTION
 
@@ -27,13 +37,35 @@ public class TestWidgetProvider extends AppWidgetProvider {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_test);
         Intent intent = new Intent(context,getClass());
         intent.setAction(CLICK_ACTION);
+        //Intent intent = new Intent(CLICK_ACTION);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, R.id.doge_imageView, intent, PendingIntent.FLAG_IMMUTABLE);
         remoteViews.setOnClickPendingIntent(R.id.doge_imageView, pendingIntent);
 
         for (int appWidgetId : appWidgetIds) {
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
         }
+        //显示狗子加圆角
+        RequestOptions options = new RequestOptions();
+        options = options
+                .apply(RequestOptions.bitmapTransform(
+                        new RoundedCornersTransformation(
+                                PixelUtils.dip2px(context,10),
+                                0,
+                                RoundedCornersTransformation.CornerType.RIGHT)));
+
+        Glide.with(context)
+                .asBitmap()
+                .load(R.drawable.doge)
+                .apply(options)
+                .into(new AppWidgetTarget(
+                        context,
+                        PixelUtils.dip2px(context,40),
+                        PixelUtils.dip2px(context,40),
+                        R.id.doge_imageView,
+                        remoteViews,
+                        appWidgetIds));
     }
+
 
     /**
      * 接收窗口小部件点击时发送的广播
@@ -42,17 +74,21 @@ public class TestWidgetProvider extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         Log.e("qwer","onReceive");
-        Log.e("qwer",intent.getAction());
-        if (CLICK_ACTION.equals(intent.getAction())) {
-            Toast.makeText(context, "Hello Doge~", Toast.LENGTH_SHORT).show();
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_test);
-            remoteViews.setTextViewText(R.id.tv,System.currentTimeMillis()+"");
+        switch (intent.getAction()){
+            case CLICK_ACTION:
+            case AppWidgetManager.ACTION_APPWIDGET_UPDATE:
+                Toast.makeText(context, "Hello Doge~", Toast.LENGTH_SHORT).show();
+                RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_test);
+                String time = TimeUtils.getCurrentTimeToString(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss");
+                remoteViews.setTextViewText(R.id.tv,time);
 
-            AppWidgetManager manager = AppWidgetManager
-                    .getInstance(context);
-            ComponentName cName = new ComponentName(context,
-                    TestWidgetProvider.class);
-            manager.updateAppWidget(cName, remoteViews);
+                AppWidgetManager manager = AppWidgetManager
+                        .getInstance(context);
+                ComponentName cName = new ComponentName(context,
+                        TestWidgetProvider.class);
+                manager.updateAppWidget(cName, remoteViews);
+                onUpdate(context,manager,manager.getAppWidgetIds(cName));
+                break;
         }
     }
 
@@ -63,6 +99,7 @@ public class TestWidgetProvider extends AppWidgetProvider {
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         super.onDeleted(context, appWidgetIds);
+        Log.e("qwer","onDeleted");
     }
 
 
@@ -72,6 +109,7 @@ public class TestWidgetProvider extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         super.onDisabled(context);
+        Log.e("qwer","onDisabled");
     }
 
 
@@ -81,6 +119,7 @@ public class TestWidgetProvider extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
+        Log.e("qwer","onEnabled");
     }
 
 
@@ -90,6 +129,7 @@ public class TestWidgetProvider extends AppWidgetProvider {
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
+        Log.e("qwer","onAppWidgetOptionsChanged");
     }
 
 
@@ -99,7 +139,11 @@ public class TestWidgetProvider extends AppWidgetProvider {
     @Override
     public void onRestored(Context context, int[] oldWidgetIds, int[] newWidgetIds) {
         super.onRestored(context, oldWidgetIds, newWidgetIds);
+        Log.e("qwer","onRestored");
     }
+
+
+
 
 
 

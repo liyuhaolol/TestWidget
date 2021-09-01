@@ -6,7 +6,7 @@
         android:layout_width="180dp"
         android:layout_height="40dp"
         android:orientation="horizontal"
-        android:background="@drawable/shape_corner_4dp">
+        android:background="@drawable/shape_corner_10dp">
         <TextView
             android:id="@+id/tv"
             android:layout_width="140dp"
@@ -18,7 +18,6 @@
             android:id="@+id/doge_imageView"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/doge"/>
+            android:scaleType="fitXY"/>
     </LinearLayout>
 </RelativeLayout>
