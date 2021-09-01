@@ -11,7 +11,8 @@
             android:id="@+id/tv"
             android:layout_width="140dp"
             android:layout_height="40dp"
-            android:text="初始化"
+            android:text="2021-09-01 17:08:47"
+            android:textSize="13sp"
             android:gravity="center_vertical"
             android:paddingLeft="6dp"/>
         <ImageView
