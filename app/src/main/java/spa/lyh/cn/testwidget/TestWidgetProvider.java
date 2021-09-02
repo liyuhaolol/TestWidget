@@ -33,37 +33,6 @@ public class TestWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
         Log.e("qwer","onUpdate");
-        //获得小组件的view
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_test);
-        Intent intent = new Intent(context,getClass());
-        intent.setAction(CLICK_ACTION);
-        //Intent intent = new Intent(CLICK_ACTION);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, R.id.doge_imageView, intent, PendingIntent.FLAG_IMMUTABLE);
-        remoteViews.setOnClickPendingIntent(R.id.doge_imageView, pendingIntent);
-
-        for (int appWidgetId : appWidgetIds) {
-            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-        }
-        //显示狗子加圆角
-        RequestOptions options = new RequestOptions();
-        options = options
-                .apply(RequestOptions.bitmapTransform(
-                        new RoundedCornersTransformation(
-                                PixelUtils.dip2px(context,10),
-                                0,
-                                RoundedCornersTransformation.CornerType.RIGHT)));
-
-        Glide.with(context)
-                .asBitmap()
-                .load(R.drawable.doge)
-                .apply(options)
-                .into(new AppWidgetTarget(
-                        context,
-                        PixelUtils.dip2px(context,40),
-                        PixelUtils.dip2px(context,40),
-                        R.id.doge_imageView,
-                        remoteViews,
-                        appWidgetIds));
     }
 
 
@@ -87,13 +56,43 @@ public class TestWidgetProvider extends AppWidgetProvider {
                     //存在小组件的话
                     RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_test);
                     String time = TimeUtils.getCurrentTimeToString(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss");
-                    remoteViews.setTextViewText(R.id.tv,time);
-
-                    manager.updateAppWidget(cName, remoteViews);
-                    onUpdate(context,manager,ids);
+                    setData(context,time,manager,remoteViews,ids);
                 }
                 break;
         }
+    }
+
+    private void setData(Context context,String time,AppWidgetManager manager,RemoteViews remoteViews,int[] ids){
+
+        Intent intent = new Intent(context,getClass());
+        intent.setAction(CLICK_ACTION);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, R.id.doge_imageView, intent, PendingIntent.FLAG_IMMUTABLE);
+        remoteViews.setOnClickPendingIntent(R.id.doge_imageView, pendingIntent);
+
+        remoteViews.setTextViewText(R.id.tv,time);
+
+        for (int appWidgetId : ids) {
+            manager.updateAppWidget(appWidgetId, remoteViews);
+        }
+        //显示狗子加圆角
+        RequestOptions options = new RequestOptions();
+        options = options
+                .apply(RequestOptions.bitmapTransform(
+                        new RoundedCornersTransformation(
+                                PixelUtils.dip2px(context,10),
+                                0,
+                                RoundedCornersTransformation.CornerType.RIGHT)));
+        Glide.with(context)
+                .asBitmap()
+                .load(R.drawable.doge)
+                .apply(options)
+                .into(new AppWidgetTarget(
+                        context,
+                        PixelUtils.dip2px(context,40),
+                        PixelUtils.dip2px(context,40),
+                        R.id.doge_imageView,
+                        remoteViews,
+                        ids));
     }
 
 
