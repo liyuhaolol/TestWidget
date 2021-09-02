@@ -15,7 +15,7 @@
             android:layout_height="40dp"
             android:gravity="center_vertical"
             android:paddingLeft="6dp"
-            android:text="2021-09-01 17:08:47"
+            android:text="初始化"
             android:textSize="13sp" />
 
         <ImageView

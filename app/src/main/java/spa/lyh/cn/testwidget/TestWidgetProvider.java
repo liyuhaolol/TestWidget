@@ -76,18 +76,22 @@ public class TestWidgetProvider extends AppWidgetProvider {
         Log.e("qwer","onReceive");
         switch (intent.getAction()){
             case CLICK_ACTION:
-            case AppWidgetManager.ACTION_APPWIDGET_UPDATE:
                 Toast.makeText(context, "Hello Doge~", Toast.LENGTH_SHORT).show();
-                RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_test);
-                String time = TimeUtils.getCurrentTimeToString(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss");
-                remoteViews.setTextViewText(R.id.tv,time);
-
+            case AppWidgetManager.ACTION_APPWIDGET_UPDATE:
                 AppWidgetManager manager = AppWidgetManager
                         .getInstance(context);
                 ComponentName cName = new ComponentName(context,
                         TestWidgetProvider.class);
-                manager.updateAppWidget(cName, remoteViews);
-                onUpdate(context,manager,manager.getAppWidgetIds(cName));
+                int[] ids = manager.getAppWidgetIds(cName);
+                if (ids != null && ids.length > 0){
+                    //存在小组件的话
+                    RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_test);
+                    String time = TimeUtils.getCurrentTimeToString(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss");
+                    remoteViews.setTextViewText(R.id.tv,time);
+
+                    manager.updateAppWidget(cName, remoteViews);
+                    onUpdate(context,manager,ids);
+                }
                 break;
         }
     }
